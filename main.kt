@@ -1,9 +1,5 @@
-/**
- * Практическая работа: аналитика покупок в магазине.
- * Коллекции (List, Set, Map), функции коллекций и generic-функция findMax.
- */
 
-// ---------- 1. Data-классы ----------
+
 
 data class User(val id: Int, val name: String, val age: Int)
 
@@ -11,7 +7,6 @@ data class Product(val id: Int, val name: String, val price: Int)
 
 data class Purchase(val userId: Int, val productId: Int, val quantity: Int)
 
-// ---------- 2. Исходные данные ----------
 
 fun createUsers(): List<User> = listOf(
     User(1, "Анна", 25),
@@ -48,32 +43,25 @@ fun createPurchases(): List<Purchase> = listOf(
     Purchase(5, 5, 1)
 )
 
-// ---------- 3. Аналитические функции ----------
 
-/** 3.1. Пользователи старше заданного возраста (filter). */
 fun findUsersOlderThan(users: List<User>, age: Int): List<User> =
     users.filter { it.age > age }
 
-/** 3.2. Самые дорогие товары (sortedByDescending + take). */
 fun findMostExpensive(products: List<Product>, count: Int): List<Product> =
     products.sortedByDescending { it.price }.take(count)
 
-/** 3.4. Покупки, сгруппированные по пользователю: userId -> список покупок. */
 fun groupPurchasesByUser(purchases: List<Purchase>): Map<Int, List<Purchase>> =
     purchases.groupBy { it.userId }
 
-/** 3.5. Покупки, сгруппированные по товару: productId -> список покупок. */
 fun groupPurchasesByProduct(purchases: List<Purchase>): Map<Int, List<Purchase>> =
     purchases.groupBy { it.productId }
 
-/** 3.3. Покупал ли пользователь товар (Map + any). */
 fun hasUserBoughtProduct(
     purchasesByUser: Map<Int, List<Purchase>>,
     userId: Int,
     productId: Int
 ): Boolean = purchasesByUser[userId]?.any { it.productId == productId } ?: false
 
-/** 3.6. Сколько потратил каждый пользователь (у кого нет покупок, будет 0). */
 fun calculateSpending(
     users: List<User>,
     products: List<Product>,
@@ -89,9 +77,6 @@ fun calculateSpending(
     }
 }
 
-// ---------- 4. Generics (вариант А: generic-функция findMax) ----------
-
-/** Максимум из списка сравниваемых элементов. Для пустого списка вернёт null. */
 fun <T : Comparable<T>> findMax(items: List<T>): T? {
     if (items.isEmpty()) {
         return null
@@ -105,7 +90,6 @@ fun <T : Comparable<T>> findMax(items: List<T>): T? {
     return best
 }
 
-/** Максимум по любому признаку: findMax(users) { it.age }. Для пустого списка вернёт null. */
 fun <T, R : Comparable<R>> findMax(items: List<T>, selector: (T) -> R): T? {
     if (items.isEmpty()) {
         return null
@@ -121,8 +105,6 @@ fun <T, R : Comparable<R>> findMax(items: List<T>, selector: (T) -> R): T? {
     }
     return best
 }
-
-// ---------- 5. Вывод отчёта ----------
 
 fun printSection(title: String) {
     println()
@@ -163,7 +145,7 @@ fun main() {
     }
 
     printSection("4. Кто что покупал")
-    val checks = listOf(1 to 1, 2 to 1, 6 to 3)   // пары (id пользователя, id товара)
+    val checks = listOf(1 to 1, 2 to 1, 6 to 3)  
     for ((userId, productId) in checks) {
         val bought = hasUserBoughtProduct(purchasesByUser, userId, productId)
         val answer = if (bought) "да" else "нет"
